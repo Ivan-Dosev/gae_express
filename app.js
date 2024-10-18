@@ -10,21 +10,21 @@ const PORT = 5001;
 
 const limiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minutes
-    max: 3, // Limit each IP to 2 requests per `window` (1 minutes)
+    max: 5, // Limit each IP to 2 requests per `window` (1 minutes)
     message: 'Too many requests from this IP, please try again later.',
 });
 
 app.use(cors());
-// app.use(cors({
-//     origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top', 'http://localhost:3000'],
-//     methods: 'GET,POST', // Specify allowed methods
-//     allowedHeaders: 'Content-Type,Authorization', // Specify allowed headers
-//     optionsSuccessStatus: 204 // For legacy browsers that choke on 204 responses
-// }));
+app.use(cors({
+     origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top', 'http://localhost:3000'],
+     methods: 'GET,POST', // Specify allowed methods
+     allowedHeaders: 'Content-Type,Authorization', // Specify allowed headers
+     optionsSuccessStatus: 204 // For legacy browsers that choke on 204 responses
+ }));
 
 // Middleware
 app.use(bodyParser.json());
-//app.use(limiter);
+app.use(limiter);
 
 const isValidWallet = (wallet) => {
     const walletRegex = /^[A-Za-z0-9_]+$/;  // Allows letters, numbers, underscores, and dashes

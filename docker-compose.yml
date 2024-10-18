@@ -1,0 +1,14 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "5001:5001"
+    volumes:
+      - sqlite-data:/usr/src/app/data  # Mount the directory where SQLite will store data
+    environment:
+      - NODE_ENV=production
+
+volumes:
+  sqlite-data:
+    driver: local
