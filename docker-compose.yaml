@@ -3,7 +3,7 @@ services:
   app:
     build: .
     ports:
-      - "8443:5001"
+      - "443:5001"
     volumes:
       - sqlite-data:/usr/src/app/data
     environment:
