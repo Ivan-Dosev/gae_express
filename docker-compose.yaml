@@ -3,9 +3,9 @@ services:
   app:
     build: .
     ports:
-      - "5001:5001"
+      - "443:5001"
     volumes:
-      - sqlite-data:/usr/src/app/data  # Mount the directory where SQLite will store data
+      - sqlite-data:/usr/src/app/data
     environment:
       - NODE_ENV=production
 
