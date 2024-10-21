@@ -14,7 +14,6 @@ const limiter = rateLimit({
     message: 'Too many requests from this IP, please try again later.',
 });
 
-app.use(cors());
 app.use(cors({
      origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top', 'http://localhost:3000'],
      methods: 'GET,POST', // Specify allowed methods
