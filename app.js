@@ -16,14 +16,14 @@ app.use(cors({
     credentials: true // Allows cookies and credentials if needed
 }));
 
-// // Middleware to log and ensure CORS headers
-// app.use((req, res, next) => {
-//     res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET,POST');
-//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-//     res.setHeader('Access-Control-Allow-Credentials', 'true'); // Allows cookies if required
-//     next();
-// });
+// Optional: Custom middleware to log and ensure CORS headers
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true'); // Allows cookies if required
+    next();
+});
 
 const limiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minutes
