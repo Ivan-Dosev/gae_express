@@ -14,13 +14,14 @@ const limiter = rateLimit({
     message: 'Too many requests from this IP, please try again later.',
 });
 
-app.use(cors({
-     //origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top'],
-     origin: [],
-     methods: 'GET,POST', // Specify allowed methods
-     allowedHeaders: 'Content-Type,Authorization', // Specify allowed headers
-     optionsSuccessStatus: 204 // For legacy browsers that choke on 204 responses
- }));
+app.use(cors());
+// app.use(cors({
+//      //origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top'],
+//      origin: [],
+//      methods: 'GET,POST', // Specify allowed methods
+//      allowedHeaders: 'Content-Type,Authorization', // Specify allowed headers
+//      optionsSuccessStatus: 204 // For legacy browsers that choke on 204 responses
+//  }));
 
 // Middleware
 app.use(bodyParser.json());

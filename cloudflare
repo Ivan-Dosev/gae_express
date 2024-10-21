@@ -1,0 +1,60 @@
+		
+Type
+
+Name
+
+Content
+
+Proxy status
+
+TTL
+
+Actions
+
+
+A
+*
+188.245.185.12
+
+Proxied
+
+Auto
+EditWhen toggled open, an additional table row will be added below this row to enable editing DNS records.
+
+
+A
+thedrop.top
+188.245.185.12
+
+Proxied
+
+Auto
+EditWhen toggled open, an additional table row will be added below this row to enable editing DNS records.
+
+
+A
+www
+188.245.185.12
+
+Proxied
+
+Auto
+EditWhen toggled open, an additional table row will be added below this row to enable editing DNS records.
+
+
+TXT
+_acme-challenge
+"yU1GtKPAYSJmabBbnQs0PMNfStGpnvdBDJS-KKy-2E0"
+DNS only
+
+Auto
+EditWhen toggled open, an additional table row will be added below this row to enable editing DNS records.
+
+
+TXT
+_acme-challenge
+"HhzWGhsShh5rj_UbqEsydH38LQLI8meTzvDGaAXSmX0"
+DNS only
+
+Auto
+EditWhen toggled open, an additional table row will be added below this row to enable editing DNS records.
