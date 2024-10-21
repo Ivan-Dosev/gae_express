@@ -8,12 +8,6 @@ const crypto = require('crypto');
 const app = express();
 const PORT = 5001;
 
-const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minutes
-    max: 5, // Limit each IP to 2 requests per `window` (1 minutes)
-    message: 'Too many requests from this IP, please try again later.',
-});
-
 app.use(cors({
     origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top', 'https://server.thedrop.top', 'http://localhost:3000'],
     methods: 'GET,POST', // Specify allowed methods
@@ -27,6 +21,12 @@ app.use((req, res, next) => {
    res.header('Access-Control-Allow-Methods', 'GET,POST'); // Allow only GET and POST requests
    res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization'); // Allow Content-Type and Authorization headers
    next();
+});
+
+const limiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minutes
+    max: 5, // Limit each IP to 2 requests per `window` (1 minutes)
+    message: 'Too many requests from this IP, please try again later.',
 });
 
 // Middleware
