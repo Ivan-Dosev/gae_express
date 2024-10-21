@@ -8,13 +8,13 @@ const crypto = require('crypto');
 const app = express();
 const PORT = 5001;
 
-// app.use(cors({
-//     origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top', 'https://server.thedrop.top', 'http://localhost:3000'],
-//     methods: 'GET,POST', // Specify allowed methods
-//     allowedHeaders: 'Content-Type,Authorization', // Specify allowed headers
-//     optionsSuccessStatus: 204, // For legacy browsers that choke on 204 responses
-//     credentials: true // Allows cookies and credentials if needed
-// }));
+// Enable CORS for specific origins
+app.use(cors({
+    origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top', 'https://server.thedrop.top', 'http://localhost:3000'],
+    methods: ['GET', 'POST'], // Specify allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+    credentials: true // Allows cookies and credentials if needed
+}));
 
 // // Middleware to log and ensure CORS headers
 // app.use((req, res, next) => {
