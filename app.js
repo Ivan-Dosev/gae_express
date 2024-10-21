@@ -9,11 +9,19 @@ const app = express();
 const PORT = 5001;
 
 // Enable CORS for specific origins
+// app.use(cors({
+//     origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top', 'https://server.thedrop.top', 'http://localhost:3000'],
+//     methods: ['GET', 'POST'], // Specify allowed methods
+//     allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+//     credentials: true // Allows cookies and credentials if needed
+// }));
+
+
 app.use(cors({
-    origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top', 'https://server.thedrop.top', 'http://localhost:3000'],
-    methods: ['GET', 'POST'], // Specify allowed methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-    credentials: true // Allows cookies and credentials if needed
+    origin: true,  // Automatically reflects the request origin as allowed origin
+    methods: ['GET', 'POST'],  // Allow GET and POST methods
+    allowedHeaders: ['Content-Type', 'Authorization'],  // Allow specific headers
+    credentials: true  // Allow cookies and credentials
 }));
 
 // Optional: Custom middleware to log and ensure CORS headers
