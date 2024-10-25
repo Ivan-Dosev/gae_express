@@ -8,22 +8,22 @@ const crypto = require('crypto');
 const app = express();
 const PORT = 5001;
 
-// // Enable CORS for specific origins
-// app.use(cors({
-//     origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top', 'https://server.thedrop.top', 'http://localhost:3000'],
-//     methods: ['GET', 'POST'], // Specify allowed methods
-//     allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-//     credentials: true // Allows cookies and credentials if needed
-// }));
+// Enable CORS for specific origins
+app.use(cors({
+    origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top', 'https://server.thedrop.top'],
+    methods: ['GET', 'POST'], // Specify allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+    credentials: true // Allows cookies and credentials if needed
+}));
 
-// // Optional: Custom middleware to log and ensure CORS headers
-// app.use((req, res, next) => {
-//     res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET,POST');
-//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-//     res.setHeader('Access-Control-Allow-Credentials', 'true'); // Allows cookies if required
-//     next();
-// });
+// Optional: Custom middleware to log and ensure CORS headers
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true'); // Allows cookies if required
+    next();
+});
 
 const limiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minutes
