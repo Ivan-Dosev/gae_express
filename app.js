@@ -10,7 +10,7 @@ const PORT = 5001;
 
 // Enable CORS for specific origins
 app.use(cors({
-    origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top', 'https://server.thedrop.top', 'http://localhost:3000'],
+    origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top', 'https://server.thedrop.top'], //, 'http://localhost:3000'
     methods: ['GET', 'POST'], // Specify allowed methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
     credentials: true // Allows cookies and credentials if needed
