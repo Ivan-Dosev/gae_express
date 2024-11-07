@@ -10,24 +10,24 @@ const PORT = 5001;
 
 // Enable CORS for specific origins
 app.use(cors({
-    origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top', 'https://server.thedrop.top'],
+    origin: ['https://play.thedrop.top', 'https://www.play.thedrop.top', 'https://thedrop.top', 'https://server.thedrop.top', 'http://localhost:3000'],
     methods: ['GET', 'POST'], // Specify allowed methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
     credentials: true // Allows cookies and credentials if needed
 }));
 
-// Optional: Custom middleware to log and ensure CORS headers
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', 'true'); // Allows cookies if required
-    next();
-});
+// // Optional: Custom middleware to log and ensure CORS headers
+// app.use((req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET,POST');
+//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+//     res.setHeader('Access-Control-Allow-Credentials', 'true'); // Allows cookies if required
+//     next();
+// });
 
 const limiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minutes
-    max: 5, // Limit each IP to 2 requests per `window` (1 minutes)
+    max: 50, // Limit each IP to 2 requests per `window` (1 minutes)
     message: 'Too many requests from this IP, please try again later.',
 });
 
@@ -69,15 +69,15 @@ const db = new sqlite3.Database('./pointsData.db', (err) => {
 // Endpoint to generate a one-time nonce after the game finishes
 app.post('/api/generateNonce', (req, res) => {
     const { wallet } = req.body;
+    console.log('Received wallet:', wallet);
 
-    if (!isValidWallet(wallet)) {
-        return res.status(400).json({ message: 'Invalid wallet address.' });
-    }
+    // if (!wallet || !isValidWallet(wallet)) {
+    //     console.error('Invalid wallet address:', wallet);
+    //     return res.status(400).json({ message: 'Invalid wallet address.' });
+    // }
 
-    // Generate a secure random token
     const nonce = crypto.randomBytes(16).toString('hex');
 
-    // Store the nonce in the database
     db.run('INSERT OR REPLACE INTO game_sessions (wallet, nonce, used) VALUES (?, ?, 0)', [wallet, nonce], (err) => {
         if (err) {
             console.error('Error generating nonce:', err.message);
@@ -96,9 +96,9 @@ app.post('/api/savePoints', (req, res) => {
 
     const points = 1000000;
 
-    if (!isValidWallet(wallet)) {
-        return res.status(400).json({ message: 'Invalid wallet address.' });
-    }
+    // if (!isValidWallet(wallet)) {
+    //     return res.status(400).json({ message: 'Invalid wallet address.' });
+    // }
 
     // Check if the nonce exists and hasn't been used yet
     db.get('SELECT * FROM game_sessions WHERE wallet = ? AND nonce = ? AND used = 0', [wallet, nonce], (err, row) => {
@@ -126,6 +126,8 @@ app.post('/api/savePoints', (req, res) => {
                 }
 
                 if (row) {
+                    console.log(`Wallet exists: ${wallet}`);
+
                     // Wallet exists, update points
                     db.run('UPDATE points SET points = points + ? WHERE wallet = ?', [points, wallet], (err) => {
                         if (err) {
@@ -134,6 +136,8 @@ app.post('/api/savePoints', (req, res) => {
                         res.json({ message: '1M points added successfully' });
                     });
                 } else {
+                    console.log(`Wallet does not exists`);
+
                     // Wallet does not exist, insert a new row
                     db.run('INSERT INTO points (wallet, points) VALUES (?, ?)', [wallet, points], (err) => {
                         if (err) {
@@ -161,12 +165,13 @@ app.get('/api/getPoints', (req, res) => {
 
 // Endpoint to get top 10 wallets by points
 app.get('/api/top10', (req, res) => {
-    db.all('SELECT wallet, points FROM points ORDER BY points DESC LIMIT 10', (err, rows) => {
+    db.all('SELECT * FROM points ORDER BY points DESC LIMIT 10', (err, rows) => {
         if (err) {
             res.status(500).json({ message: 'Error retrieving top 10 results' });
-            console.error(err.message);
+            console.error('Error retrieving top 10 results:', err.message);
         } else {
-            res.json(rows); // Ensure rows is an array
+            console.log('Top 10 wallets:', rows); // Log top 10 results
+            res.json(rows);
         }
     });
 });
