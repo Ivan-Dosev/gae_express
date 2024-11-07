@@ -88,27 +88,21 @@ app.post('/api/generateNonce', (req, res) => {
     });
 });
 
-// Endpoint to save points with nonce validation
 app.post('/api/savePoints', (req, res) => {
     const { wallet, nonce } = req.body;
-
     console.log(`Received request to save points for wallet: ${wallet}`);
 
     const points = 1000000;
 
-    // if (!isValidWallet(wallet)) {
-    //     return res.status(400).json({ message: 'Invalid wallet address.' });
-    // }
-
-    // Check if the nonce exists and hasn't been used yet
+    // Validate the nonce - make sure it exists and hasn’t been used
     db.get('SELECT * FROM game_sessions WHERE wallet = ? AND nonce = ? AND used = 0', [wallet, nonce], (err, row) => {
         if (err) {
-            console.error('Database error:', err.message);
+            console.error('Database error while fetching nonce:', err.message);
             return res.status(500).json({ message: 'Error fetching data' });
         }
 
         if (!row) {
-            // If no valid nonce is found, reject the request
+            console.warn('Invalid or already used nonce for wallet:', wallet);
             return res.status(400).json({ message: 'Invalid or already used nonce' });
         }
 
@@ -119,30 +113,33 @@ app.post('/api/savePoints', (req, res) => {
                 return res.status(500).json({ message: 'Error updating nonce' });
             }
 
-            // Now update the points for the wallet
+            // Now update or insert points for the wallet
             db.get('SELECT * FROM points WHERE wallet = ?', [wallet], (err, row) => {
                 if (err) {
+                    console.error('Error fetching points for wallet:', wallet, err.message);
                     return res.status(500).json({ message: 'Error fetching points' });
                 }
 
                 if (row) {
-                    console.log(`Wallet exists: ${wallet}`);
-
+                    console.log(`Updating points for existing wallet: ${wallet}`);
                     // Wallet exists, update points
                     db.run('UPDATE points SET points = points + ? WHERE wallet = ?', [points, wallet], (err) => {
                         if (err) {
+                            console.error('Error updating points for wallet:', wallet, err.message);
                             return res.status(500).json({ message: 'Error updating points' });
                         }
+                        console.log(`1M points successfully added for wallet: ${wallet}`);
                         res.json({ message: '1M points added successfully' });
                     });
                 } else {
-                    console.log(`Wallet does not exists`);
-
+                    console.log(`Inserting new wallet: ${wallet}`);
                     // Wallet does not exist, insert a new row
                     db.run('INSERT INTO points (wallet, points) VALUES (?, ?)', [wallet, points], (err) => {
                         if (err) {
+                            console.error('Error inserting new wallet:', wallet, err.message);
                             return res.status(500).json({ message: 'Error saving points' });
                         }
+                        console.log(`1M points successfully saved for new wallet: ${wallet}`);
                         res.json({ message: '1M points saved successfully' });
                     });
                 }
